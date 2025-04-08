@@ -1,13 +1,8 @@
 const express = require('express');
-const path = require('path');
-
-const rootDir = require('../utils/path');
+const dashboardController = require('../controllers/dashboard');
 
 const router = express.Router();
 
-router.get('/', (req, res, use) => {
-     console.log(req);
-     res.sendFile(path.join(rootDir, 'views', 'dashboard.html'));
-});
+router.get('/', dashboardController.getListEntries);
 
 module.exports = router;

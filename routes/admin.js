@@ -1,18 +1,12 @@
 const express = require('express');
 
 const router = express.Router();
-const path = require('path')
+const path = require('path');
 
-const rootDir = require('../utils/path');
+// const adminController = require('../controllers/admin');
 
-router.get("/add-entry", (req, res, next) => {
-    console.log(req);
-    res.sendFile(path.join(rootDir, 'views', 'add-entry.html'))
-});
+// router.get("/add-entry", dashboardController.getAddWeightEntry);
 
-router.post("/add-entry", (req, res, next) => {
-    console.log(req);
-    res.redirect('/');
-});
+// router.post("/add-entry", dashboardController.postAddWeightEntry);
 
 module.exports = router;
