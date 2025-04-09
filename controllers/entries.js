@@ -20,3 +20,15 @@ exports.getAllEntries = (req, res, next) => {
     console.log(req);
     res.redirect('/');
 };
+
+exports.getEntryById = (req, res, next) => {
+    const entryId = req.params.entryId;
+    console.log(entryId);
+    let result = WeightEntry.findById(entryId);
+    res.status(200).json(result);
+}
+
+exports.deleteEntryById = (req, res, next) => {
+    const entryIdToDelete = req.params.entryId;
+    console.log(entryIdToDelete);
+}

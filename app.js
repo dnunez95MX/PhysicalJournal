@@ -19,3 +19,5 @@ app.use(dashboardRoutes);
 app.use(errorController.get404)
 
 app.listen(3010)
+
+console.log(3010);
