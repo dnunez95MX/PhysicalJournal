@@ -1,23 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import Dashboard from './components/dashboard/dashboard.component';
-import Entries from './components/entries/entries.component';
-import { useEffect } from 'react';
-import api from './api/apiconfig'
+import Dashboard from './components/dashboard/Dashboard';
+import Entries from './components/entries/Entries';
 
 const App = () => {
-  useEffect(() => {
-    let test = async () => {
-      try{
-        const response = await api.get(`${process.env.REACT_APP_API_HOST}`)
-        console.log(response)
-        
-      } catch (error){
-
-      }
-    }
-  })
-
   return (
     <Routes>
       <Route path='/' element={<Dashboard />}/>

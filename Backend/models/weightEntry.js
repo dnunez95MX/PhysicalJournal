@@ -32,8 +32,8 @@ module.exports = class WeightEntry {
     });
   }
 
-  static fetchAll(cb) {
-    getEntriesFromFile(cb);
+  static async fetchAll(cb) {
+    return await getEntriesFromFile(cb);
   }
 
   static findById(id) {
