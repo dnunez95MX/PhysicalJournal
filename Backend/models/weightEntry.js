@@ -18,8 +18,9 @@ const getEntriesFromFile = cb => {
 };
 
 module.exports = class WeightEntry {
-  constructor(weight) {
+  constructor(weight, date) {
     this.weight = weight;
+    this.date = date;
   }
 
   save() {

@@ -4,9 +4,7 @@ const router = express.Router();
 
 const entriesController = require('../controllers/entries');
 
-router.get("/add-entry", entriesController.getAddWeightEntry);
-
-router.post("/add-entry", entriesController.postAddWeightEntry);
+router.post("/", entriesController.postAddWeightEntry);
 
 router.get("/:entryId", entriesController.getEntryById);
 

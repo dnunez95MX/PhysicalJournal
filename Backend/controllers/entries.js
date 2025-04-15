@@ -3,16 +3,10 @@ const path = require('path');
 
 const WeightEntry = require('../models/weightEntry');
 
-exports.getAddWeightEntry = (req, res, next) => {
-    console.log(req);
-    res.sendFile(path.join(rootDir, 'views', 'add-entry.html'));
-}
-
 exports.postAddWeightEntry = (req, res, next) => {
-    console.log(req);
-    const entry = new WeightEntry(req.body.weight);
+    console.log(req.body.weight);
+    const entry = new WeightEntry(req.body.weight, req.body.date);
     entry.save();
-    res.redirect('/');
 }
 
 exports.getAllEntries = (req, res, next) => {
