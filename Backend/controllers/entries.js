@@ -5,8 +5,11 @@ const WeightEntry = require('../models/weightEntry');
 
 exports.postAddWeightEntry = (req, res, next) => {
     console.log(req.body.weight);
-    const entry = new WeightEntry(req.body.weight, req.body.date);
+    const weightEntry = req.body.weight;
+    const dateEntry = new Date().toISOString()
+    const entry = new WeightEntry(weightEntry, dateEntry);
     entry.save();
+    res.status(201).json({result : entry})
 }
 
 exports.getAllEntries = (req, res, next) => {
