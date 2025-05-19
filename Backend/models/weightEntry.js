@@ -24,7 +24,7 @@ module.exports = class WeightEntry {
   }
 
   save() {
-    this.id = Math.random().toString();
+    this.id = Math.round(Math.random()).toString();
     getEntriesFromFile(products => {
       products.push(this);
       fs.writeFile(p, JSON.stringify(products), err => {
@@ -33,8 +33,8 @@ module.exports = class WeightEntry {
     });
   }
 
-  static async fetchAll(cb) {
-    return await getEntriesFromFile(cb);
+  static fetchAll() {
+    return getEntriesFromFile(entries => { return entries });
   }
 
   static findById(id) {

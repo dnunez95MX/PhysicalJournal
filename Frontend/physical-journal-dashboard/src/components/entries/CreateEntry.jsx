@@ -6,11 +6,10 @@ import { PlusOutlined } from '@ant-design/icons';
 const CreateEntry = () => {
     const [form] = Form.useForm();
     const [weightEntry, setWeightEntry] = useState('');
+
     const handleSubmit = async (event) => {
-        console.log(event)
-        console.log(weightEntry + 'submited');
         try{
-            const resp = await axios_instance.post('/entries', {
+            const resp = await axios_instance.post('/entries/add-entry', {
                 weight: weightEntry,
                 date: Date.now()
             }).then(x => console.log(resp.data))
@@ -83,7 +82,7 @@ const CreateEntry = () => {
           <RangePicker />
         </Form.Item> */}
         <Form.Item label="Weight Entry">
-          <InputNumber onChange={(value) => { console.log(value); setWeightEntry(value) }}/>
+          <InputNumber onChange={value => setWeightEntry(value) }/>
         </Form.Item>
         {/* <Form.Item label="TextArea">
           <TextArea rows={4} />
