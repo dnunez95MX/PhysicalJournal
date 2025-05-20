@@ -1,21 +1,25 @@
 import { useState } from "react";
 import axios_instance from "../../helpers/apiconfig";
 import { Form, InputNumber, Button } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { useForm } from "antd/es/form/Form";
 
-const CreateEntry = () => {
+const GetEntryById = () => {
   const [form] = Form.useForm();
-  const [weightEntry, setWeightEntry] = useState("");
+  const [entryId, setEntryId] = useState("");
+  const [entry, setEntry] = useState("");
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try {
-      const resp = await axios_instance
-        .post("/entries/add-entry", {
-          weight: weightEntry,
-          date: Date.now(),
+      axios_instance
+        .get(`/entries/${entryId}`)
+        .then((res) => {
+          if (res.status !== 200) {
+            throw new Error("Failed to fetch item");
+          }
+          console.log(entry);
+          setEntry(entry);
         })
-        .then((x) => console.log(resp.data))
-        .catch((e) => console.log(e + "error"));
+        .catch((err) => console.error(err));
     } catch (err) {
       console.log(err);
     }
@@ -27,8 +31,9 @@ const CreateEntry = () => {
 
   return (
     <>
+      <div>{entry}</div>
       <Form
-        name="Add weight entry"
+        name="Search weight entry"
         form={form}
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
@@ -85,7 +90,7 @@ const CreateEntry = () => {
           <RangePicker />
         </Form.Item> */}
         <Form.Item label="Weight Entry">
-          <InputNumber onChange={(value) => setWeightEntry(value)} />
+          <InputNumber onChange={(value) => setEntryId(value)} />
         </Form.Item>
         {/* <Form.Item label="TextArea">
           <TextArea rows={4} />
@@ -117,8 +122,8 @@ const CreateEntry = () => {
           <Rate />
         </Form.Item> */}
         <Form.Item label={null}>
-          <Button type="primary" htmlType="submit" icon={<PlusOutlined />}>
-            Add
+          <Button type="primary" htmlType="submit">
+            Search
           </Button>
         </Form.Item>
       </Form>
@@ -126,4 +131,4 @@ const CreateEntry = () => {
   );
 };
 
-export default CreateEntry;
+export default GetEntryById;
