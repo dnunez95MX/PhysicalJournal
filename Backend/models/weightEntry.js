@@ -7,14 +7,17 @@ const p = path.join(
   "entries.json"
 );
 
-const getEntriesFromFile = async (cb) => {
-  fs.readFile(p, (err, fileContent) => {
+const getEntriesFromFile = (cb) => {
+  let data = fs.readFileSync(p, (err) => {
     if (err) {
-      cb([]);
-    } else {
-      cb(JSON.parse(fileContent));
+      console.log(err);
     }
-  });
+  }
+  );
+  if (data.length === 0) {  // Check if the file is empty
+    cb([]);  
+  }
+  cb(JSON.parse(data));
 };
 
 module.exports = class WeightEntry {
@@ -34,23 +37,21 @@ module.exports = class WeightEntry {
   }
 
   static async fetchAll() {
-    return await getEntriesFromFile((entries) => {
-      return entries;
-    });
+    return await new Promise((resolve) => { 
+      getEntriesFromFile((entries) => {
+        resolve(entries);
+      });
+     });
   }
 
   static async findById(id) {
     try {
-      let x = await getEntriesFromFile();
-      console.log(x);
-      let res = await getEntriesFromFile((entries) => {
-        console.log(entries);
-        return console.log(entries.find((x) => x.id == 3));
-        console.log(id);
-        //return entries.find((e) => e.id == id);
+      return await new Promise((resolve) => {
+        getEntriesFromFile((entries) => {
+          let foundEntry = entries.find(e => e.id == id);
+          resolve(foundEntry);
+        });
       });
-      console.log(res);
-      return res;
     } catch (error) {
       console.log(error);
     }
