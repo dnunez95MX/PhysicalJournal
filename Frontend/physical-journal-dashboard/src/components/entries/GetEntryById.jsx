@@ -16,8 +16,8 @@ const GetEntryById = () => {
           if (res.status !== 200) {
             throw new Error("Failed to fetch item");
           }
-          console.log(entry);
-          setEntry(entry);
+          console.log(res.data.entry);
+          setEntry(res.data.entry.weight);
         })
         .catch((err) => console.error(err));
     } catch (err) {

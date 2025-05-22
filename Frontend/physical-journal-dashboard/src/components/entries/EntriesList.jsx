@@ -16,10 +16,13 @@ const Dashboard = () => {
     async function getEntries() {
         setLoading(true);
         try{
-            const response = await axios_instance.get('/entries');
-            console.log(response.data.result)
-            setEntries(response.data.result);
+            await axios_instance.get('/entries').then((res) => {
+                if (res.status !== 200) {
+                    throw new Error('Failed to fetch items');
+                }        
+            setEntries(res.data.entries);
             setLoading(false);
+            }).catch((err) => console.error(err));; 
         } catch (error) {
             console.log(error);
             setLoading(false);
