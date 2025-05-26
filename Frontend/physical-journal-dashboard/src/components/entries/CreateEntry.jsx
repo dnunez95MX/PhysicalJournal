@@ -2,10 +2,13 @@ import { useState } from "react";
 import axios_instance from "../../helpers/apiconfig";
 import { Form, InputNumber, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const CreateEntry = () => {
   const [form] = Form.useForm();
   const [weightEntry, setWeightEntry] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
@@ -14,7 +17,15 @@ const CreateEntry = () => {
           weight: weightEntry,
           date: Date.now(),
         })
-        .then((x) => console.log(resp.data))
+        .then(resp => {
+          if (resp.status !== 201) {
+            throw new Error("Failed to add entry");
+          }
+          console.log("Response:", resp.data);
+          form.resetFields();
+          setWeightEntry("");
+          navigate("/entries");
+        })
         .catch((e) => console.log(e + "error"));
     } catch (err) {
       console.log(err);
