@@ -55,5 +55,19 @@ exports.getEntryById = (req, res, next) => {
 
 exports.deleteEntryById = (req, res, next) => {
   const entryIdToDelete = req.params.entryId;
-  console.log(entryIdToDelete);
+  WeightEntry.deleteEntryById(entryIdToDelete)
+    .then((entry) => {
+      if (!entry) {
+        const error = new Error("Could not find entry");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ message: "Entry deleted succesfully", entry: entry });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 };

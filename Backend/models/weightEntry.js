@@ -27,7 +27,7 @@ module.exports = class WeightEntry {
   }
 
   save() {
-    this.id = Math.round(Math.random()).toString();
+    this.id = Math.random(100000).toString();
     getEntriesFromFile((products) => {
       products.push(this);
       fs.writeFile(p, JSON.stringify(products), (err) => {
@@ -55,5 +55,26 @@ module.exports = class WeightEntry {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  static async deleteEntryById(id){
+    return await new Promise((resolve, reject) => {
+      getEntriesFromFile((entries) => {
+        const entryIndex = entries.findIndex(e => e.id == id);
+        if (entryIndex === -1) {
+          reject(new Error("Entry not found"));
+        } else {
+          const deletedEntry = entries.splice(entryIndex, 1);
+          fs.writeFile(p, JSON.stringify(entries), (err) => {
+            if (err) {
+              console.log(err);
+              reject(err);
+            } else {
+              resolve(deletedEntry[0]);
+            }
+          });
+        }
+      });
+    });
   }
 };

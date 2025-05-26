@@ -11,6 +11,8 @@ router.post("/add-entry", [
     body('weight').trim().isLength({min:2})
 ], entriesController.postAddWeightEntry);
 
+router.delete("/:entryId", entriesController.deleteEntryById);
+
 router.get("/:entryId", entriesController.getEntryById);
 
 router.delete("/delete/:entryId", entriesController.deleteEntryById)
