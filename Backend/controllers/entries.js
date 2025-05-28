@@ -62,7 +62,9 @@ exports.deleteEntryById = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-      res.status(200).json({ message: "Entry deleted succesfully", entry: entry });
+      res
+        .status(204)
+        .json({ message: `Entry with id: ${entry.id} succesfully deleted` });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -70,4 +72,5 @@ exports.deleteEntryById = (req, res, next) => {
       }
       next(err);
     });
+  console.log(entryIdToDelete);
 };

@@ -12,10 +12,10 @@ const getEntriesFromFile = (cb) => {
     if (err) {
       console.log(err);
     }
-  }
-  );
-  if (data.length === 0) {  // Check if the file is empty
-    cb([]);  
+  });
+  if (data.length === 0) {
+    // Check if the file is empty
+    cb([]);
   }
   cb(JSON.parse(data));
 };
@@ -37,18 +37,18 @@ module.exports = class WeightEntry {
   }
 
   static async fetchAll() {
-    return await new Promise((resolve) => { 
+    return await new Promise((resolve) => {
       getEntriesFromFile((entries) => {
         resolve(entries);
       });
-     });
+    });
   }
 
   static async findById(id) {
     try {
       return await new Promise((resolve) => {
         getEntriesFromFile((entries) => {
-          let foundEntry = entries.find(e => e.id == id);
+          let foundEntry = entries.find((e) => e.id == id);
           resolve(foundEntry);
         });
       });
@@ -57,10 +57,10 @@ module.exports = class WeightEntry {
     }
   }
 
-  static async deleteEntryById(id){
+  static async deleteEntryById(id) {
     return await new Promise((resolve, reject) => {
       getEntriesFromFile((entries) => {
-        const entryIndex = entries.findIndex(e => e.id == id);
+        const entryIndex = entries.findIndex((e) => e.id == id);
         if (entryIndex === -1) {
           reject(new Error("Entry not found"));
         } else {
