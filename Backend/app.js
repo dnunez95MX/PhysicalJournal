@@ -2,7 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('swagger-jsdoc');;
+const swaggerDocument = require('swagger-jsdoc');
+const mongoDb = require('./utils/database');
+// const mongoose = require('mongoose');
 
 const path = require('path');
 
@@ -45,6 +47,10 @@ app.use('/admin', adminRoutes);
 
 app.use(errorController.get404)
 
-app.listen(8000, () => {
+mongoDb.mongoConnect(() => {
+    app.listen(8000, () => {
     console.log('Server is running on port 8000');
 })
+});
+
+// await mongoose.connect('mongodb://127.0.0.1:27017/test');
