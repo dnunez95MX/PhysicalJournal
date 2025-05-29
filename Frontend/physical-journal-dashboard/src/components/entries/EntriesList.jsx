@@ -14,6 +14,9 @@ const Dashboard = () => {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedEntry, setSelectedEntry] = useState(null);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(5);
+  const [totalEntries, setTotalEntries] = useState(0);
 
   useEffect(() => {
     getEntries();
@@ -58,12 +61,13 @@ const Dashboard = () => {
     setLoading(true);
     try {
       await axios_instance
-        .get("/entries")
+        .get(`/entries?page=${page}&limit=${limit}`)
         .then((res) => {
           if (res.status !== 200) {
             throw new Error("Failed to fetch items");
           }
           setEntries(res.data.entries);
+          setTotalEntries(res.data.totalItems);
           setLoading(false);
         })
         .catch((err) => console.error(err));
