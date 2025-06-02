@@ -4,7 +4,8 @@ const path = require("path");
 const { validationResult } = require("express-validator");
 
 // const WeightEntry = require("../models/weightEntry");
-const Entry = require("../models/Entry");
+// const Entry = require("../models/Entry");
+const Weight = require("../models/weight");
 
 exports.postAddWeightEntry = (req, res, next) => {
   console.log(req.body.weight);
@@ -12,10 +13,20 @@ exports.postAddWeightEntry = (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(422).json({ message: "validation failed" });
   }
-  const weightEntry = req.body.weight;
-  const entry = new Entry(weightEntry);
-  entry.save();
-  res.status(201).json({ message: "entry added succesfully", result: entry });
+  // const weightEntry = req.body.weight;
+  // const entry = new Entry(weightEntry);
+  // entry.save();
+  // res.status(201).json({ message: "entry added succesfully", result: entry });
+
+  const weight = new Weight({ weight: req.body.weight, date: Date.now() });
+  weight
+    .save()
+    .then((result) => {
+      res.status(201).json({ message: "entry added succesfully", result });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.getAllEntries = (req, res, next) => {
@@ -24,17 +35,14 @@ exports.getAllEntries = (req, res, next) => {
 
   let totalItems;
 
-  //WeightEntry.fetchAll()
-    // .countDocuments()
-    // .then((count) => 
-    // {
-    //   totalItems = count;
-    //   return WeightEntry.fetchAll()
-    //     .skip((currentPage - 1) * itemsPerPage)
-    //     .limit(itemsPerPage);
-    // })
-
-  Entry.fetchAll()
+  Weight.find()
+    .countDocuments()
+    .then((count) => {
+      totalItems = count;
+      return Weight.find()
+        .skip((currentPage - 1) * itemsPerPage)
+        .limit(itemsPerPage);
+    })
     .then((entries) => {
       console.log(entries);
       res.status(200).json({ message: "entries fetched", entries });
@@ -46,6 +54,28 @@ exports.getAllEntries = (req, res, next) => {
 
       next(err);
     });
+
+  // Entry.fetchAll()
+  //   .countDocuments()
+  //   .then((count) => {
+  //     totalItems = count;
+  //     return WeightEntry.fetchAll()
+  //       .skip((currentPage - 1) * itemsPerPage)
+  //       .limit(itemsPerPage);
+  //   })
+
+  // Entry.fetchAll()
+  //   .then((entries) => {
+  //     console.log(entries);
+  //     res.status(200).json({ message: "entries fetched", entries });
+  //   })
+  //   .catch((err) => {
+  //     if (!err.statusCode) {
+  //       err.statusCode = 500;
+  //     }
+
+  //     next(err);
+  //   });
 };
 
 exports.getEntryById = (req, res, next) => {
