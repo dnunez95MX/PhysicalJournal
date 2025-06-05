@@ -13,10 +13,6 @@ exports.postAddWeightEntry = (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(422).json({ message: "validation failed" });
   }
-  // const weightEntry = req.body.weight;
-  // const entry = new Entry(weightEntry);
-  // entry.save();
-  // res.status(201).json({ message: "entry added succesfully", result: entry });
 
   const weight = new Weight({ weight: req.body.weight, date: Date.now() });
   weight
@@ -78,24 +74,39 @@ exports.getAllEntries = (req, res, next) => {
   //   });
 };
 
-exports.getEntryById = (req, res, next) => {
-  const entryId = req.params.entryId;
-  Entry.findById(entryId)
+exports.getWeightEntryByDate = (req, res, next) => {
+  const weightDate = new Date(req.params.date);
+  let entryDate = new Date(weightDate.setHours(2, 0, 0));
+  Weight.findOne({
+    date: {
+      $gte: new Date(entryDate), // Inicio del día (00:00:00)
+      $lt: new Date(weightDate.setHours(23, 59, 59)), // Fin del día (23:59:59)
+    },
+  })
     .then((entry) => {
       if (!entry) {
-        const error = new Error("Could not find entry");
-        error.statusCode = 404;
-        throw error;
+        return res.redirect("/weight");
       }
-
-      res.status(200).json({ message: "Entry fetched", entry: entry });
+      res.status(200).json({ message: "entry fetched", entry });
     })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    });
+    .catch((err) => console.log(err));
+
+  // Entry.findById(entryId)
+  //   .then((entry) => {
+  //     if (!entry) {
+  //       const error = new Error("Could not find entry");
+  //       error.statusCode = 404;
+  //       throw error;
+  //     }
+
+  //     res.status(200).json({ message: "Entry fetched", entry: entry });
+  //   })
+  //   .catch((err) => {
+  //     if (!err.statusCode) {
+  //       err.statusCode = 500;
+  //     }
+  //     next(err);
+  //   });
 };
 
 exports.deleteEntryById = (req, res, next) => {

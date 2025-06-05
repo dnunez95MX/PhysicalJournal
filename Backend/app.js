@@ -11,7 +11,7 @@ require("dotenv").config();
 const path = require("path");
 
 const adminRoutes = require("./routes/admin");
-const entriesRoutes = require("./routes/entries");
+const weightEntriesRoutes = require("./routes/weight");
 const dashboardRoutes = require("./routes/dashboard");
 const errorController = require("./controllers/errors");
 const caloriesRouter = require("./routes/calories");
@@ -47,7 +47,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/dashboard", dashboardRoutes);
-app.use("/entries", entriesRoutes);
+app.use("/weight", weightEntriesRoutes);
 app.use("/admin", adminRoutes);
 app.use("/calories", caloriesRouter);
 app.use("/protein", proteinIntakeRouter);
