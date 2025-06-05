@@ -1,17 +1,17 @@
 import { useState } from "react";
 import axios_instance from "../../helpers/apiconfig";
-import { Form, InputNumber, Button } from "antd";
+import { Form, DatePicker, Button } from "antd";
 import { useForm } from "antd/es/form/Form";
 
-const GetEntryById = () => {
+const GetWeightEntryByDate = () => {
   const [form] = Form.useForm();
-  const [entryId, setEntryId] = useState("");
+  const [date, setDate] = useState("");
   const [entry, setEntry] = useState("");
 
   const handleSubmit = () => {
     try {
       axios_instance
-        .get(`/entries/${entryId}`)
+        .get(`/weight/${date}`)
         .then((res) => {
           if (res.status !== 200) {
             throw new Error("Failed to fetch item");
@@ -90,7 +90,7 @@ const GetEntryById = () => {
           <RangePicker />
         </Form.Item> */}
         <Form.Item label="Weight Entry">
-          <InputNumber onChange={(value) => setEntryId(value)} />
+          <DatePicker onChange={setDate} />
         </Form.Item>
         {/* <Form.Item label="TextArea">
           <TextArea rows={4} />
@@ -131,4 +131,4 @@ const GetEntryById = () => {
   );
 };
 
-export default GetEntryById;
+export default GetWeightEntryByDate;

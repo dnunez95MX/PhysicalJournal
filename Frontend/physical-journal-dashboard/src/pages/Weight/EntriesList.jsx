@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { DeleteOutlined, ExclamationCircleFilled } from "@ant-design/icons";
 import { Button, message } from "antd";
 import { Modal } from "antd";
-import axios from "axios";
+import Paginator from "../../components/Paginator/Paginator";
 
 const { confirm } = Modal;
 
@@ -43,7 +43,7 @@ const Dashboard = () => {
   const deleteEntry = async () => {
     console.log(selectedEntry);
     await axios_instance
-      .delete(`/entries/${selectedEntry.id}`)
+      .delete(`/weight/${selectedEntry.id}`)
       .then((res) => {
         if (res.status !== 204) {
           throw new Error("Failed to delete item");
@@ -57,11 +57,26 @@ const Dashboard = () => {
       });
   };
 
+  async function loadPosts(direction) {
+    let newPage;
+    if (direction) {
+    }
+    if (direction === "next") {
+      // newPage = page + 1;
+      // setPage(newPage);
+    }
+    if (direction === "previous") {
+      // newPage = page - 1;
+      // setPage(newPage);
+    }
+    // await getEntries();
+  }
+
   async function getEntries() {
     setLoading(true);
     try {
       await axios_instance
-        .get(`/entries?page=${page}&limit=${limit}`)
+        .get(`/weight?page=${page}&limit=${limit}`)
         .then((res) => {
           if (res.status !== 200) {
             throw new Error("Failed to fetch items");
@@ -84,39 +99,46 @@ const Dashboard = () => {
           <img src={logo} className="App-logo" alt="logo" />
         </div>
       ) : null}
-      <div style={{ width: "80%" }}>
-        {entries.length > 0 ? (
-          <div>
-            <ul>
-              {entries.map((entry, index) => (
-                <li
-                  key={index}
-                  onClick={() => {
-                    setSelectedEntry(entry);
-                  }}
-                >
-                  <p>{entry.date}</p>
-                  <p>{entry.weight}</p>
-                  <p>
-                    <Button
-                      icon={<DeleteOutlined />}
-                      onClick={() => {
-                        console.log(selectedEntry);
-                        showDeleteModal();
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
+      <div style={{ width: "20%", float: "right" }}>
+        <Link to="/add-weight">Add Weight Measurement</Link>
       </div>
       <div style={{ width: "20%", float: "right" }}>
-        <Link to="/entries">Manage Entries</Link>
+        <Link to="/">Dashboard</Link>
       </div>
+
+      <Paginator
+        onPrevious={loadPosts("previous")}
+        onNext={loadPosts("next")}
+        lastPage={Math.ceil(totalEntries / 2)}
+        currentPage={page}
+      >
+        <ul>
+          {entries.map((entry, index) => (
+            <>
+              <li
+                key={index}
+                onClick={() => {
+                  setSelectedEntry(entry);
+                }}
+              >
+                <p>{new Date(entry.date).toLocaleDateString("en-US")}</p>
+                <p>{entry.weight}</p>
+                <p>
+                  <Button
+                    icon={<DeleteOutlined />}
+                    onClick={() => {
+                      console.log(selectedEntry);
+                      showDeleteModal();
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </p>
+              </li>
+            </>
+          ))}
+        </ul>
+      </Paginator>
     </>
   );
 };

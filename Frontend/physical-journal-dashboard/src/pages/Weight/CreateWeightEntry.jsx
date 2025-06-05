@@ -4,7 +4,7 @@ import { Form, InputNumber, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
-const CreateEntry = () => {
+const CreateWeightEntry = () => {
   const [form] = Form.useForm();
   const [weightEntry, setWeightEntry] = useState("");
 
@@ -13,18 +13,18 @@ const CreateEntry = () => {
   const handleSubmit = async () => {
     try {
       const resp = await axios_instance
-        .post("/entries/add-entry", {
+        .post("/weight/add-weight", {
           weight: weightEntry,
           date: Date.now(),
         })
-        .then(resp => {
+        .then((resp) => {
           if (resp.status !== 201) {
             throw new Error("Failed to add entry");
           }
           console.log("Response:", resp.data);
           form.resetFields();
           setWeightEntry("");
-          navigate("/entries");
+          navigate("/weight-entries");
         })
         .catch((e) => console.log(e + "error"));
     } catch (err) {
@@ -96,7 +96,11 @@ const CreateEntry = () => {
           <RangePicker />
         </Form.Item> */}
         <Form.Item label="Weight Entry">
-          <InputNumber onChange={(value) => setWeightEntry(value)} />
+          <InputNumber
+            defaultValue={80}
+            step={0.01}
+            onChange={(value) => setWeightEntry(value)}
+          />
         </Form.Item>
         {/* <Form.Item label="TextArea">
           <TextArea rows={4} />
@@ -137,4 +141,4 @@ const CreateEntry = () => {
   );
 };
 
-export default CreateEntry;
+export default CreateWeightEntry;

@@ -22,13 +22,13 @@ const Dashboard = () => {
       <div style={{ width: "20%", float: "right" }}>
         <ul>
           <li>
-            <Link to="/entries">Manage Entries</Link>
+            <Link to="/weight-entries">Manage Entries</Link>
           </li>
           <li>
-            <Link to="/add-entry">Add Entry</Link>
+            <Link to="/add-weight">Add Entry</Link>
           </li>
           <li>
-            <Link to="/entry">Get Entry</Link>
+            <Link to="/weight">Get Entry</Link>
           </li>
         </ul>
       </div>
