@@ -16,6 +16,7 @@ const dashboardRoutes = require("./routes/dashboard");
 const errorController = require("./controllers/errors");
 const caloriesRouter = require("./routes/calories");
 const proteinIntakeRouter = require("./routes/protein");
+const recipesRouter = require("./routes/recipes");
 // const foodInfoRouter = require("./routes/foodInfo");
 
 const app = express();
@@ -51,6 +52,7 @@ app.use("/weight", weightEntriesRoutes);
 app.use("/admin", adminRoutes);
 app.use("/calories", caloriesRouter);
 app.use("/protein", proteinIntakeRouter);
+app.use("/recipes", recipesRouter);
 
 app.use(errorController.get404);
 
