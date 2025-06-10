@@ -5,6 +5,10 @@ import Dashboard from "./components/dashboard/Dashboard";
 import EntriesList from "./pages/Weight/EntriesList";
 import CreateWeightEntry from "./pages/Weight/CreateWeightEntry";
 import GetWeightEntryByDate from "./pages/Weight/GetWeightEntryByDate";
+import RecipesList from "./pages/Recipes/RecipesList";
+import AddRecipe from "./pages/Recipes/AddRecipe";
+import CaloriesEntries from "./pages/Calories/CaloriesEntries";
+import CreateCaloriesEntry from "./pages/Calories/CreateCaloriesEntry";
 
 const App = () => {
   return (
@@ -13,6 +17,11 @@ const App = () => {
       <Route path="/weight-entries" element={<EntriesList />} />
       <Route path="/add-weight" element={<CreateWeightEntry />} />
       <Route path="/weight" element={<GetWeightEntryByDate />} />
+      <Route path="/calories" element={<CaloriesEntries />} />
+      <Route path="/add-calories-entry" element={<CreateCaloriesEntry />} />
+      {/* <Route path="/calories-date" element={<GetCaloriesEntryByDate />} /> */}
+      <Route path="/recipes" element={<RecipesList />} />
+      <Route path="/add-recipe" element={<AddRecipe />} />
     </Routes>
   );
 };

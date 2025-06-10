@@ -7,10 +7,6 @@ import { Link } from "react-router-dom";
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // getEntries();
-  }, []);
-
   return (
     <>
       {loading ? (
@@ -26,6 +22,30 @@ const Dashboard = () => {
           </li>
           <li>
             <Link to="/add-weight">Add Entry</Link>
+          </li>
+          <li>
+            <Link to="/weight">Get Entry</Link>
+          </li>
+        </ul>
+
+        <ul>
+          <li>
+            <Link to="/calories">Calories Entries</Link>
+          </li>
+          <li>
+            <Link to="/add-calories-entry">Add Calories Entry</Link>
+          </li>
+          <li>
+            <Link to="/calories-date">Get Calories Entry by date</Link>
+          </li>
+        </ul>
+
+        <ul>
+          <li>
+            <Link to="/recipes">Manage Recipes</Link>
+          </li>
+          <li>
+            <Link to="/add-recipe">Add Recipe</Link>
           </li>
           <li>
             <Link to="/weight">Get Entry</Link>
