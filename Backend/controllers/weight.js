@@ -36,12 +36,13 @@ exports.getAllEntries = (req, res, next) => {
     .then((count) => {
       totalItems = count;
       return Weight.find()
+        .sort({ date: "descending" })
         .skip((currentPage - 1) * itemsPerPage)
         .limit(itemsPerPage);
     })
     .then((entries) => {
       console.log(entries);
-      res.status(200).json({ message: "entries fetched", entries });
+      res.status(200).json({ message: "entries fetched", entries, totalItems });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -50,28 +51,14 @@ exports.getAllEntries = (req, res, next) => {
 
       next(err);
     });
+};
 
-  // Entry.fetchAll()
-  //   .countDocuments()
-  //   .then((count) => {
-  //     totalItems = count;
-  //     return WeightEntry.fetchAll()
-  //       .skip((currentPage - 1) * itemsPerPage)
-  //       .limit(itemsPerPage);
-  //   })
+exports.getLastEntry = async (req, res, next) => {
+  try {
+    const result = await Weight.findOne().sort({ createdAt: -1 });
 
-  // Entry.fetchAll()
-  //   .then((entries) => {
-  //     console.log(entries);
-  //     res.status(200).json({ message: "entries fetched", entries });
-  //   })
-  //   .catch((err) => {
-  //     if (!err.statusCode) {
-  //       err.statusCode = 500;
-  //     }
-
-  //     next(err);
-  //   });
+    res.status(200).json({ entry: result.weight });
+  } catch {}
 };
 
 exports.getWeightEntryByDate = (req, res, next) => {
@@ -109,9 +96,9 @@ exports.getWeightEntryByDate = (req, res, next) => {
   //   });
 };
 
-exports.deleteEntryById = (req, res, next) => {
+exports.deleteEntry = (req, res, next) => {
   const entryIdToDelete = req.params.entryId;
-  Entry.deleteEntryById(entryIdToDelete)
+  Weight.findByIdAndDelete(entryIdToDelete)
     .then((entry) => {
       if (!entry) {
         const error = new Error("Could not find entry");
@@ -120,7 +107,7 @@ exports.deleteEntryById = (req, res, next) => {
       }
       res
         .status(204)
-        .json({ message: `Entry with id: ${entry.id} succesfully deleted` });
+        .json({ message: `entry deleted with value ${entry.weight}` });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -128,5 +115,23 @@ exports.deleteEntryById = (req, res, next) => {
       }
       next(err);
     });
-  console.log(entryIdToDelete);
+
+  // Entry.deleteEntryById(entryIdToDelete)
+  //   .then((entry) => {
+  //     if (!entry) {
+  //       const error = new Error("Could not find entry");
+  //       error.statusCode = 404;
+  //       throw error;
+  //     }
+  //     res
+  //       .status(204)
+  //       .json({ message: `Entry with id: ${entry.id} succesfully deleted` });
+  //   })
+  //   .catch((err) => {
+  //     if (!err.statusCode) {
+  //       err.statusCode = 500;
+  //     }
+  //     next(err);
+  //   });
+  // console.log(entryIdToDelete);
 };

@@ -13,8 +13,9 @@ router.post(
   weightEntriesController.postAddWeightEntry
 );
 
-router.delete("/:entryId", weightEntriesController.deleteEntryById);
+router.delete("/:entryId", weightEntriesController.deleteEntry);
+
+router.get("/latest-entry", weightEntriesController.getLastEntry);
 
 router.get("/:date", weightEntriesController.getWeightEntryByDate);
-
 module.exports = router;
