@@ -28,27 +28,12 @@ const RecipesList = () => {
   return (
     <>
       <ul>
-        {recipesEntries.map((x, index) => {
-          <>
-            <li key={index}>
-              {console.log(x.name)}
-              {console.log(x.calories)}
-              <h1>{x.name}</h1>
-              <p>{x.calories}</p>
-              <p>
-                {/* <Button
-                    icon={<DeleteOutlined />}
-                    onClick={() => {
-                      console.log(selectedEntry);
-                      showDeleteModal();
-                    }}
-                  >
-                    Delete
-                  </Button> */}
-              </p>
-            </li>
-          </>;
-        })}
+        {recipesEntries.map((entry, index) => (
+          <li key={index}>
+            <p>{entry.name}</p>
+            <p>{entry.calories}</p>
+          </li>
+        ))}
       </ul>
     </>
   );

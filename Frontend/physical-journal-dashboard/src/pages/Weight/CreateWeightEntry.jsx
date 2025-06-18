@@ -1,35 +1,50 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios_instance from "../../helpers/apiconfig";
 import { Form, InputNumber, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { form, reset } from "react-hook-form";
 
 const CreateWeightEntry = () => {
   const [form] = Form.useForm();
-  const [weightEntry, setWeightEntry] = useState("");
+  const [weightEntry, setWeightEntry] = useState(0.0);
+
+  useEffect(() => {
+    getLatestEntry();
+  }, [form]);
 
   const navigate = useNavigate();
 
+  const getLatestEntry = async () => {
+    await axios_instance
+      .get("/weight/latest-entry")
+      .then((result) => {
+        if (result.status !== 200) {
+          form.setFieldValue("weight", 80.0);
+        } else {
+          form.setFieldValue("weight", result.data.entry);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const handleSubmit = async () => {
-    try {
-      const resp = await axios_instance
-        .post("/weight/add-weight", {
-          weight: weightEntry,
-          date: Date.now(),
-        })
-        .then((resp) => {
-          if (resp.status !== 201) {
-            throw new Error("Failed to add entry");
-          }
-          console.log("Response:", resp.data);
-          form.resetFields();
-          setWeightEntry("");
-          navigate("/weight-entries");
-        })
-        .catch((e) => console.log(e + "error"));
-    } catch (err) {
-      console.log(err);
-    }
+    await axios_instance
+      .post("/weight/add-weight", {
+        weight: weightEntry,
+        date: Date.now(),
+      })
+      .then((resp) => {
+        if (resp.status !== 201) {
+          throw new Error("Failed to add entry");
+        }
+        console.log("Response:", resp.data);
+        form.resetFields();
+        navigate("/weight-entries");
+      })
+      .catch((e) => console.log(e + "error"));
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -95,9 +110,10 @@ const CreateWeightEntry = () => {
         <Form.Item label="RangePicker">
           <RangePicker />
         </Form.Item> */}
-        <Form.Item label="Weight Entry">
+
+        <h4>Previous Value: </h4>
+        <Form.Item label="Weight (kg)" name="weight">
           <InputNumber
-            defaultValue={80}
             step={0.01}
             onChange={(value) => setWeightEntry(value)}
           />

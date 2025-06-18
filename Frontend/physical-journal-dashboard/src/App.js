@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import "@ant-design/v5-patch-for-react-19";
 import Dashboard from "./components/dashboard/Dashboard";
-import EntriesList from "./pages/Weight/EntriesList";
+import WeightEntriesList from "./pages/Weight/WeightEntriesList";
 import CreateWeightEntry from "./pages/Weight/CreateWeightEntry";
 import GetWeightEntryByDate from "./pages/Weight/GetWeightEntryByDate";
 import RecipesList from "./pages/Recipes/RecipesList";
@@ -14,7 +14,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Dashboard />} />
-      <Route path="/weight-entries" element={<EntriesList />} />
+      <Route path="/weight-entries" element={<WeightEntriesList />} />
       <Route path="/add-weight" element={<CreateWeightEntry />} />
       <Route path="/weight" element={<GetWeightEntryByDate />} />
       <Route path="/calories" element={<CaloriesEntries />} />

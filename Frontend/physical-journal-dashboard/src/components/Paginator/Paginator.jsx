@@ -6,16 +6,13 @@ import React from "react";
 const Paginator = (props) => (
   <div className="paginator">
     {props.children}
-    <div className="paginator__controls">
+    <div>
       {props.currentPage > 1 && (
-        <Button className="paginator__control" onClick={props.onPrevious}>
-          Previous
-        </Button>
+        <Button onClick={props.onPrevious}>Previous</Button>
       )}
+      {console.log(props.lastPage)}
       {props.currentPage < props.lastPage && (
-        <Button className="paginator__control" onClick={props.onNext}>
-          Next
-        </Button>
+        <Button onClick={props.onNext}>Next</Button>
       )}
     </div>
   </div>

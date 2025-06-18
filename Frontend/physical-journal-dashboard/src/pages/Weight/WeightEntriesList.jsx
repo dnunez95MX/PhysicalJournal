@@ -3,17 +3,17 @@ import "../../App.css";
 import axios_instance from "../../helpers/apiconfig";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { DeleteOutlined, ExclamationCircleFilled } from "@ant-design/icons";
-import { Button, message } from "antd";
-import { Modal } from "antd";
+import { ExclamationCircleFilled } from "@ant-design/icons";
+import { message } from "antd";
+import { Modal, Button } from "antd";
 import Paginator from "../../components/Paginator/Paginator";
+import WeightEntry from "./WeightEntry";
 
 const { confirm } = Modal;
 
 const Dashboard = () => {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedEntry, setSelectedEntry] = useState(null);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [totalEntries, setTotalEntries] = useState(0);
@@ -22,8 +22,7 @@ const Dashboard = () => {
     getEntries();
   }, []);
 
-  const showDeleteModal = () => {
-    console.log(selectedEntry);
+  const showDeleteModal = (id) => {
     confirm({
       title: "Are you sure delete this item?",
       icon: <ExclamationCircleFilled />,
@@ -32,7 +31,7 @@ const Dashboard = () => {
       okType: "danger",
       cancelText: "No",
       async onOk() {
-        deleteEntry();
+        deleteEntry(id);
       },
       onCancel() {
         console.log("Cancel");
@@ -40,10 +39,9 @@ const Dashboard = () => {
     });
   };
 
-  const deleteEntry = async () => {
-    console.log(selectedEntry);
+  const deleteEntry = async (idToDelete) => {
     await axios_instance
-      .delete(`/weight/${selectedEntry.id}`)
+      .delete(`/weight/${idToDelete}`)
       .then((res) => {
         if (res.status !== 204) {
           throw new Error("Failed to delete item");
@@ -62,14 +60,14 @@ const Dashboard = () => {
     if (direction) {
     }
     if (direction === "next") {
-      // newPage = page + 1;
-      // setPage(newPage);
+      newPage = page + 1;
+      setPage(newPage);
     }
     if (direction === "previous") {
-      // newPage = page - 1;
-      // setPage(newPage);
+      newPage = page - 1;
+      setPage(newPage);
     }
-    // await getEntries();
+    await getEntries();
   }
 
   async function getEntries() {
@@ -94,51 +92,41 @@ const Dashboard = () => {
 
   return (
     <>
-      {loading ? (
+      {loading && (
         <div className="App">
           <img src={logo} className="App-logo" alt="logo" />
         </div>
-      ) : null}
-      <div style={{ width: "20%", float: "right" }}>
-        <Link to="/add-weight">Add Weight Measurement</Link>
-      </div>
-      <div style={{ width: "20%", float: "right" }}>
-        <Link to="/">Dashboard</Link>
+      )}
+      <div>
+        <div style={{ width: "20%" }}>
+          <Link to="/add-weight">Add Weight Measurement</Link>
+        </div>
+        <div style={{ width: "20%" }}>
+          <Link to="/">Dashboard</Link>
+        </div>
       </div>
 
-      <Paginator
-        onPrevious={loadPosts("previous")}
-        onNext={loadPosts("next")}
-        lastPage={Math.ceil(totalEntries / 2)}
-        currentPage={page}
-      >
-        <ul>
-          {entries.map((entry, index) => (
-            <>
-              <li
+      <div style={{ marginTop: "5%" }}>
+        <div style={{ width: "40%", marginLeft: "20%" }}>
+          <Paginator
+            onPrevious={() => loadPosts("previous")}
+            onNext={() => loadPosts("next")}
+            lastPage={Math.ceil(totalEntries / limit)}
+            currentPage={page}
+          >
+            {entries.map((entry, index) => (
+              <WeightEntry
                 key={index}
-                onClick={() => {
-                  setSelectedEntry(entry);
-                }}
-              >
-                <p>{new Date(entry.date).toLocaleDateString("en-US")}</p>
-                <p>{entry.weight}</p>
-                <p>
-                  <Button
-                    icon={<DeleteOutlined />}
-                    onClick={() => {
-                      console.log(selectedEntry);
-                      showDeleteModal();
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </p>
-              </li>
-            </>
-          ))}
-        </ul>
-      </Paginator>
+                id={entry._id}
+                weight={entry.weight}
+                date={entry.date}
+                onShowDeleteModal={showDeleteModal}
+                style={{ display: "inline-block", padding: "5px" }}
+              />
+            ))}
+          </Paginator>
+        </div>
+      </div>
     </>
   );
 };
