@@ -3,9 +3,8 @@ import "../../App.css";
 import axios_instance from "../../helpers/apiconfig";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ExclamationCircleFilled } from "@ant-design/icons";
-import { message } from "antd";
-import { Modal, Button } from "antd";
+import { ExclamationCircleFilled, DeleteOutlined } from "@ant-design/icons";
+import { Modal, Button, List, Skeleton, message } from "antd";
 import Paginator from "../../components/Paginator/Paginator";
 import WeightEntry from "./WeightEntry";
 
@@ -97,18 +96,66 @@ const Dashboard = () => {
           <img src={logo} className="App-logo" alt="logo" />
         </div>
       )}
-      <div>
-        <div style={{ width: "20%" }}>
-          <Link to="/add-weight">Add Weight Measurement</Link>
-        </div>
-        <div style={{ width: "20%" }}>
-          <Link to="/">Dashboard</Link>
-        </div>
+      <div
+        style={{
+          width: "50%",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          gap: 10,
+        }}
+      >
+        <Link to="/add-weight">
+          <Button>Add Weight Measurement</Button>
+        </Link>
+        <Link to="/">
+          <Button>Dashboard</Button>
+        </Link>
       </div>
 
       <div style={{ marginTop: "5%" }}>
         <div style={{ width: "40%", marginLeft: "20%" }}>
-          <Paginator
+          <List
+            pagination={{
+              onChange: (page) => {
+                console.log(page);
+              },
+              pageSize: 7,
+            }}
+            dataSource={entries}
+            renderItem={(item) => (
+              <List.Item
+                actions={[
+                  <a key="list-loadmore-edit">edit</a>,
+                  <a key="list-loadmore-more">
+                    {" "}
+                    <Button
+                      icon={<DeleteOutlined />}
+                      onClick={() => {
+                        showDeleteModal(item._id);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </a>,
+                ]}
+              >
+                <Skeleton avatar title={false} loading={item.loading} active>
+                  <List.Item.Meta
+                    title={
+                      //to do: open item and details with WeightEntry component
+                      <a href="https://ant.design">
+                        {new Date(item.date).toLocaleDateString("en-US")}
+                      </a>
+                    }
+                    description=""
+                  />
+                  <div>{item.weight}</div>
+                </Skeleton>
+              </List.Item>
+            )}
+          />
+
+          {/* <Paginator
             onPrevious={() => loadPosts("previous")}
             onNext={() => loadPosts("next")}
             lastPage={Math.ceil(totalEntries / limit)}
@@ -124,7 +171,7 @@ const Dashboard = () => {
                 style={{ display: "inline-block", padding: "5px" }}
               />
             ))}
-          </Paginator>
+          </Paginator> */}
         </div>
       </div>
     </>
